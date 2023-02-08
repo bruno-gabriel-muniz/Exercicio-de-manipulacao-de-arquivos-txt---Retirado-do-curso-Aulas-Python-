@@ -44,8 +44,8 @@ que será chamada pelo programa principal.
 
 def le_espaço_usado(usuarios_txt):
     """
-    Função que lê o arquivo usuário.txt e devolve o nome e o espaço utilizado em 
-    disco de cada funcionario separado em uma lista com sublistas dentro
+    Função que lê o arquivo usuário.txt e devolve o nome e o espaço utilizado
+    em disco de cada funcionario separado em uma lista com sublistas dentro
     """
     # abrindo o arquivo que contem os dados
     arquivo_de_origem_dos_dados = open(usuarios_txt, "r")
@@ -63,4 +63,16 @@ def le_espaço_usado(usuarios_txt):
     return lista_com_os_dados
 
 
-le_espaço_usado("usuarios.txt")
+def caucula_espaço_utilizado(lista_com_os_dados):
+    """
+    Função que converte os bytes de cada funcionario em mega bytes
+    """
+    # entrando na lista dos dados e passando em cada funcionario
+    for funcionario in range(1, len(lista_com_os_dados)):
+        # convertendo o valor de bytes para mega em
+        # cada lista de cada funcionario
+        lista_com_os_dados[funcionario][1] = int(
+            lista_com_os_dados[funcionario][1]) / 1048576
+
+
+caucula_espaço_utilizado(le_espaço_usado("usuarios.txt"))
