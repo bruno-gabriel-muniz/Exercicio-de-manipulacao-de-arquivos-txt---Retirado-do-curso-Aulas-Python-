@@ -63,7 +63,7 @@ def le_espaço_usado(usuarios_txt):
         # adicionando os 3 dados na lista dos dados
         lista_com_os_dados.append([cont, nome, espaço_utilizado])
     # retorna a lista com os espaços utilizados
-    return lista_com_os_dados
+    return lista_com_os_dados, cont
 
 
 def caucula_espaço_utilizado(lista_com_os_dados):
@@ -94,6 +94,8 @@ def caucula_porcentagem_usada(lista_com_os_dados):
         # usuário a porcentagem e cauculando ela
         lista_com_os_dados[porcentagem].append(
             float(lista_com_os_dados[porcentagem][2])/espaco_total_usado)
+    # retornando o espaço total usado para fazer a analize
+    return espaco_total_usado
 
 
 def cria_relatorio(lista_com_os_dados):
@@ -125,15 +127,33 @@ def cria_relatorio(lista_com_os_dados):
                lista_com_os_dados[dados_da_linha][3]*100))
 
 
+def faz_analise(total_do_espaço_usado, n_usuários):
+    """
+    Função que mostra a média e o total de megabytes usados pelos usuários
+    """
+    # abrindo o relatório para adicionar a média e o total do espaço usado
+    relatorio = open("Espaços utilizado em disco pelos usuários.txt", "a")
+    # mostrando o espaço total usado
+    relatorio.write("\n"+"Espaço total ocupado: %.2f MB\n"
+                    % (total_do_espaço_usado))
+    # mostrando o espaço médio usado
+    relatorio.write("Espaço médio ocupado: %.2f MB"
+                    % (total_do_espaço_usado/n_usuários))
+
+
 def relatorio_do_espaço_usado():
-    # lendo os espaços usados pelos usuário
-    lista_com_os_dados = le_espaço_usado("usuarios.txt")
+    # lendo os espaços usados pelos usuário e quantos usuário
+    # usaram o disco
+    lista_com_os_dados, cont = le_espaço_usado("usuarios.txt")
     # transformando os bytes em mega bytes
     caucula_espaço_utilizado(lista_com_os_dados)
-    # cauculando a porcentagem do disco usada pelos usuário
-    caucula_porcentagem_usada(lista_com_os_dados)
+    # cauculando a porcentagem do disco usada
+    # pelos usuário e pegando o total usado
+    total_do_espaco_usado = caucula_porcentagem_usada(lista_com_os_dados)
     # criando o relatório com os dados gerais
     cria_relatorio(lista_com_os_dados)
+    # terminando a parte da análise do relatório
+    faz_analise(total_do_espaco_usado, cont)
 
 
 relatorio_do_espaço_usado()
