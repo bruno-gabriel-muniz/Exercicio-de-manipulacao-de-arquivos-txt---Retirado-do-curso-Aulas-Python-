@@ -49,15 +49,19 @@ def le_espaço_usado(usuarios_txt):
     # abrindo o arquivo que contem os dados
     arquivo_de_origem_dos_dados = open(usuarios_txt, "r")
     # criando a lista que vai conter os dados
-    lista_com_os_dados = [["nome"+" "*12, "espaço utilizado", "porcentagem"]]
+    lista_com_os_dados = [["Nr. ", "nome"+" "*12,
+                           "espaço utilizado", "porcentagem"]]
+    # criando uma variável contadora para adicionar no relatório
+    cont = 0
     # percorrendo toda as linhas do arquivo em um for loop
     for t in arquivo_de_origem_dos_dados:
+        cont += 1
         # pegando o nome da pessoa
         nome = t[0:16]
         # pegando o espaço ultilizado por ela
         espaço_utilizado = t[16:]
-        # adicionando os dois dados na lista dos dados
-        lista_com_os_dados.append([nome, espaço_utilizado])
+        # adicionando os 3 dados na lista dos dados
+        lista_com_os_dados.append([cont, nome, espaço_utilizado])
     # retorna a lista com os espaços utilizados
     return lista_com_os_dados
 
@@ -70,8 +74,8 @@ def caucula_espaço_utilizado(lista_com_os_dados):
     for funcionario in range(1, len(lista_com_os_dados)):
         # convertendo o valor de bytes para mega em
         # cada lista de cada funcionario
-        lista_com_os_dados[funcionario][1] = float(
-            lista_com_os_dados[funcionario][1]) / 1048576
+        lista_com_os_dados[funcionario][2] = float(
+            lista_com_os_dados[funcionario][2]) / 1048576
     return lista_com_os_dados
 
 
@@ -84,25 +88,46 @@ def caucula_porcentagem_usada(lista_com_os_dados):
     # passando por todos os espaços usados para somar a variavel total
     for soma in range(1, len(lista_com_os_dados)):
         # somando as variaveis
-        espaco_total_usado += float(lista_com_os_dados[soma][1])
+        espaco_total_usado += float(lista_com_os_dados[soma][2])
     # passando por todas as variaveis para caulcular a porcentagen
     for porcentagem in range(1, len(lista_com_os_dados)):
         # atribuindo ao final da lista de cada
         # usuário a porcentagem e cauculando ela
         lista_com_os_dados[porcentagem].append(
-            float(lista_com_os_dados[porcentagem][1])/espaco_total_usado)
+            float(lista_com_os_dados[porcentagem][2])/espaco_total_usado)
     # retornado a lista atualizada
     return lista_com_os_dados
 
 
 def cria_relatorio(lista_com_os_dados):
+    """
+    Essa função cria o relatório do espaço utilizado em disco pelos usuários
+    esta so pernche os dados que serão dados por outras funções
+    """
+    # criando o arquivo do relatório
     relatorio = open(
-        "Relatorio dos espaços utilizado em disco pelos usuários", "w")
-    for dados_da_linha in lista_com_os_dados:
-        relatorio.write("oi")
+        "Espaços utilizado em disco pelos usuários.txt", "w")
+    # escrevendo o rítulo do relatório
+    relatorio.write(
+        "ACME Inc.          Uso do espaço em disco pelos usuários \n" + "-"*35
+        + "\n")
+    # mostrando o que cada coluna representa
+    relatorio.write("\n" +
+                    lista_com_os_dados[0][0]
+                    + lista_com_os_dados[0][1]+" " + "--" +
+                    lista_com_os_dados[0][2] + "--"
+                    + lista_com_os_dados[0][3]+"\n"+"\n")
+    # passando por todas as listas dos usuários e mostrando os dados
+    for dados_da_linha in range(1, len(lista_com_os_dados)):
+        # imprimindo o nome o número,o espaço usado e a porcentagem dele
+        relatorio.write(
+            "%3i %s -- %12.2f GB-- %8.2f %% \n"
+            % (lista_com_os_dados[dados_da_linha][0],
+               lista_com_os_dados[dados_da_linha][1],
+               lista_com_os_dados[dados_da_linha][2],
+               lista_com_os_dados[dados_da_linha][3]*100))
 
 
 lista_com_os_dados = caucula_porcentagem_usada(
     caucula_espaço_utilizado(le_espaço_usado("usuarios.txt")))
-for olha in lista_com_os_dados:
-    print(olha)
+cria_relatorio(lista_com_os_dados)
