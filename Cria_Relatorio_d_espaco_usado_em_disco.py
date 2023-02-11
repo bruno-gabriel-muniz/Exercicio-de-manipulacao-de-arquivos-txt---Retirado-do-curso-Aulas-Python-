@@ -76,7 +76,6 @@ def caucula_espaço_utilizado(lista_com_os_dados):
         # cada lista de cada funcionario
         lista_com_os_dados[funcionario][2] = float(
             lista_com_os_dados[funcionario][2]) / 1048576
-    return lista_com_os_dados
 
 
 def caucula_porcentagem_usada(lista_com_os_dados):
@@ -95,8 +94,6 @@ def caucula_porcentagem_usada(lista_com_os_dados):
         # usuário a porcentagem e cauculando ela
         lista_com_os_dados[porcentagem].append(
             float(lista_com_os_dados[porcentagem][2])/espaco_total_usado)
-    # retornado a lista atualizada
-    return lista_com_os_dados
 
 
 def cria_relatorio(lista_com_os_dados):
@@ -128,6 +125,15 @@ def cria_relatorio(lista_com_os_dados):
                lista_com_os_dados[dados_da_linha][3]*100))
 
 
-lista_com_os_dados = caucula_porcentagem_usada(
-    caucula_espaço_utilizado(le_espaço_usado("usuarios.txt")))
-cria_relatorio(lista_com_os_dados)
+def relatorio_do_espaço_usado():
+    # lendo os espaços usados pelos usuário
+    lista_com_os_dados = le_espaço_usado("usuarios.txt")
+    # transformando os bytes em mega bytes
+    caucula_espaço_utilizado(lista_com_os_dados)
+    # cauculando a porcentagem do disco usada pelos usuário
+    caucula_porcentagem_usada(lista_com_os_dados)
+    # criando o relatório com os dados gerais
+    cria_relatorio(lista_com_os_dados)
+
+
+relatorio_do_espaço_usado()
