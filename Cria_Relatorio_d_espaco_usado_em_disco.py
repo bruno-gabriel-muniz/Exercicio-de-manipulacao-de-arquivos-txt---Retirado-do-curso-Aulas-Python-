@@ -1,4 +1,3 @@
-oi = 1
 """
 A ACME Inc., uma empresa de 500 funcionários, está tendo problemas de espaço em
 disco no seu servidor de arquivos. Para tentar resolver este problema, o
